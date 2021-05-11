@@ -9,16 +9,9 @@ import {
 	IonTabs,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import {
-	ellipse,
-	globeOutline,
-	moonOutline,
-	square,
-	triangle,
-} from "ionicons/icons";
-import Tab1 from "./pages/Tab1";
-import Tab2 from "./pages/Tab2";
-import Tab3 from "./pages/Tab3";
+import { ellipse, globeOutline } from "ionicons/icons";
+import Countries from "./pages/Countries";
+import Home from "./pages/Home";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -38,28 +31,34 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
+import Country from "./pages/Country";
 
 const App: React.FC = () => (
 	<IonApp>
 		<IonReactRouter>
+			<IonRouterOutlet>
+				<Route exact path="/country/:id">
+					<Country />
+				</Route>
+			</IonRouterOutlet>
 			<IonTabs>
 				<IonRouterOutlet>
-					<Route exact path="/tab1">
-						<Tab1 />
-					</Route>
-					<Route exact path="/tab2">
-						<Tab2 />
+					<Route exact path="/home">
+						<Home />
 					</Route>
 					<Route exact path="/">
-						<Redirect to="/tab1" />
+						<Redirect to="/home" />
+					</Route>
+					<Route path="/countries">
+						<Countries />
 					</Route>
 				</IonRouterOutlet>
 				<IonTabBar slot="bottom">
-					<IonTabButton tab="tab1" href="/tab1">
+					<IonTabButton tab="home" href="/home">
 						<IonIcon icon={globeOutline} />
 						<IonLabel>Global</IonLabel>
 					</IonTabButton>
-					<IonTabButton tab="tab2" href="/tab2">
+					<IonTabButton tab="countries" href="/countries">
 						<IonIcon icon={ellipse} />
 						<IonLabel>Countries</IonLabel>
 					</IonTabButton>
