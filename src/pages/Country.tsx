@@ -10,35 +10,32 @@ import { useParams } from "react-router";
 import { country } from "../services/api";
 import Error from "../components/Error";
 import Loading from "../components/Loading";
-import { Bar } from "react-chartjs-2";
+import {
+	AreaChart,
+	Area,
+	XAxis,
+	YAxis,
+	CartesianGrid,
+	Tooltip,
+	ResponsiveContainer,
+	Legend,
+} from "recharts";
 
 interface ParamType {
 	id: string;
 }
 
-const o = {
-	scales: {
-		yAxes: [
-			{
-				ticks: {
-					beginAtZero: true,
-				},
-			},
-		],
-	},
-};
+interface Difference {
+	previous: number;
+	actual: number;
+}
 
 const Country = () => {
 	const { id } = useParams<ParamType>();
 	const [countryData, setCountryData] = useState([]);
 	const [error, setError] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
-	const [deaths, setDeaths] = useState();
-	const [confirmed, setConfirmed] = useState();
-	const [active, setActive] = useState();
-	const [recovered, setRecovered] = useState();
-
-	const [options, setOptions] = useState(o);
+	const [data, setData] = useState<Array<any>>([]);
 
 	useEffect(() => {
 		const getData = async () => {
@@ -55,124 +52,19 @@ const Country = () => {
 	}, [id]);
 
 	useEffect(() => {
-		const deaths: any = {
-			labels: countryData.reduce((allDates: any, date: any) => {
-				return [...allDates, ""];
-			}, []),
-			title: {
-				text: "Deaths",
-			},
-			datasets: [
+		const data: Array<any> = countryData.reduce((allDates: any, d: any) => {
+			return [
+				...allDates,
 				{
-					label: "Deaths",
-					data: countryData.reduce((allDates: any, date: any) => {
-						const index = allDates.length - 1;
-						const dataAnterior: any = countryData[index];
-						const diff =
-							allDates.length > 1
-								? date.Deaths - dataAnterior.Deaths
-								: date.Deaths;
-						return [...allDates, diff > 0 ? diff : 0];
-					}, []),
-					tension: 0,
-					borderColor: "rgb(248,169,113)",
-					backgroundColor: "rgba(0,0,0,0)",
-					radius: 0,
-					borderWidth: 1,
-					pointHitRadius: 2,
+					Date: new Date(d.Date).toLocaleDateString(),
+					Deaths: d.Deaths,
+					Recovered: d.Recovered,
+					Active: d.Active,
+					Confirmed: d.Confirmed,
 				},
-			],
-		};
-		const confirmed: any = {
-			labels: countryData.reduce((allDates: any, date: any) => {
-				return [...allDates, ""];
-			}, []),
-			title: {
-				text: "Confirmed",
-			},
-			datasets: [
-				{
-					label: "Confirmed",
-					data: countryData.reduce((allDates: any, date: any) => {
-						const index = allDates.length - 1;
-						const dataAnterior: any = countryData[index];
-						const diff =
-							allDates.length > 1
-								? date.Confirmed - dataAnterior.Confirmed
-								: date.Confirmed;
-						return [...allDates, diff > 0 ? diff : 0];
-					}, []),
-					tension: 0,
-					borderColor: "rgb(248,169,113)",
-					backgroundColor: "rgba(0,0,0,0)",
-					radius: 0,
-					borderWidth: 1,
-					pointHitRadius: 2,
-				},
-			],
-		};
-
-		const active: any = {
-			labels: countryData.reduce((allDates: any, date: any) => {
-				return [...allDates, ""];
-			}, []),
-			title: {
-				text: "Active",
-			},
-			datasets: [
-				{
-					label: "Active",
-					data: countryData.reduce((allDates: any, date: any) => {
-						const index = allDates.length - 1;
-						const dataAnterior: any = countryData[index];
-						const diff =
-							allDates.length > 1
-								? date.Active - dataAnterior.Active
-								: date.Active;
-						return [...allDates, diff > 0 ? diff : 0];
-					}, []),
-					tension: 0,
-					borderColor: "rgb(248,169,113)",
-					backgroundColor: "rgba(0,0,0,0)",
-					radius: 0,
-					borderWidth: 1,
-					pointHitRadius: 2,
-				},
-			],
-		};
-
-		const recovered: any = {
-			labels: countryData.reduce((allDates: any, date: any) => {
-				return [...allDates, ""];
-			}, []),
-			title: {
-				text: "Recovered",
-			},
-			datasets: [
-				{
-					label: "Recovered",
-					data: countryData.reduce((allDates: any, date: any) => {
-						const index = allDates.length - 1;
-						const dataAnterior: any = countryData[index];
-						const diff =
-							allDates.length > 1
-								? date.Recovered - dataAnterior.Recovered
-								: date.Recovered;
-						return [...allDates, diff > 0 ? diff : 0];
-					}, []),
-					tension: 0,
-					borderColor: "rgb(248,169,113)",
-					backgroundColor: "rgba(0,0,0,0)",
-					radius: 0,
-					borderWidth: 1,
-					pointHitRadius: 2,
-				},
-			],
-		};
-		setDeaths(deaths);
-		setConfirmed(confirmed);
-		setActive(active);
-		setRecovered(recovered);
+			];
+		}, []);
+		setData(data);
 	}, [countryData]);
 
 	return (
@@ -190,11 +82,54 @@ const Country = () => {
 				</IonHeader>
 				{isLoading && <Loading />}
 				{countryData && (
-					<div className="grid grid-cols-1 gap-y-4 p-4 text-white">
-						<Bar data={deaths} type="number" options={options} />
-						<Bar data={confirmed} type="number" options={options} />
-						<Bar data={active} type="number" options={options} />
-						<Bar data={confirmed} type="number" options={options} />
+					<div className="flex h-full w-full items-center px-4 pt-10 py-24">
+						<ResponsiveContainer width="100%" height="100%">
+							<AreaChart
+								width={1}
+								height={1}
+								data={data}
+								margin={{
+									top: 0,
+									right: 0,
+									left: 0,
+									bottom: 0,
+								}}
+							>
+								<CartesianGrid strokeDasharray="3 3" />
+								<XAxis dataKey="Date" />
+								<YAxis />
+								<Tooltip />
+								<Area
+									type="monotone"
+									dataKey="Deaths"
+									stackId="1"
+									stroke="#FF0000"
+									fill="#FF0000"
+								/>
+								<Area
+									type="monotone"
+									dataKey="Recovered"
+									stackId="1"
+									stroke="#00AD8B"
+									fill="#00AD8B"
+								/>
+								<Area
+									type="monotone"
+									dataKey="Confirmed"
+									stackId="1"
+									stroke="#00609F"
+									fill="#00609F"
+								/>
+								<Area
+									type="monotone"
+									dataKey="Active"
+									stackId="1"
+									stroke="#ffc658"
+									fill="#ffc658"
+								/>
+								<Legend />
+							</AreaChart>
+						</ResponsiveContainer>
 					</div>
 				)}
 				{error && <Error msg="Country not found" />}
