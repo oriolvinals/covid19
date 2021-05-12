@@ -82,7 +82,7 @@ const Countries = () => {
 								<a
 									key={c.ID}
 									className="rounded-md bg-gray-800 p-4"
-									href={"/country/" + c.Country}
+									href={"/country/" + c.Slug}
 								>
 									<p className="text-center uppercase text-2xl font-black mb-3">
 										{c.Country}

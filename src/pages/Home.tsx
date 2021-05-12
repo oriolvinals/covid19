@@ -58,7 +58,7 @@ const Home = () => {
 				</IonHeader>
 				{isLoading && <Loading />}
 				{data && (
-					<div className="flex h-full w-full items-center">
+					<div className="flex h-full w-full items-center text-white">
 						<div className="grid grid-cols-1 gap-y-2 p-2 w-full">
 							<div className="border-2 border-gray-200 px-4 py-6 rounded-lg flex flex-row items-center space-x-3">
 								<IonIcon

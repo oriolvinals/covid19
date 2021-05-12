@@ -30,9 +30,25 @@ interface Difference {
 	actual: number;
 }
 
+interface Day {
+	ID: string;
+	Country: string;
+	CountryCode: string;
+	Province: string;
+	City: string;
+	CityCode: string;
+	Lat: string;
+	Lon: string;
+	Confirmed: number;
+	Recovered: number;
+	Deaths: number;
+	Active: number;
+	Date: Date;
+}
+
 const Country = () => {
 	const { id } = useParams<ParamType>();
-	const [countryData, setCountryData] = useState([]);
+	const [countryData, setCountryData] = useState<Array<Day>>([]);
 	const [error, setError] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const [data, setData] = useState<Array<any>>([]);
@@ -71,19 +87,25 @@ const Country = () => {
 		<IonPage>
 			<IonHeader>
 				<IonToolbar>
-					<IonTitle>{id}</IonTitle>
+					<IonTitle>
+						{countryData.length !== 0 ? countryData[0].Country : id}
+					</IonTitle>
 				</IonToolbar>
 			</IonHeader>
 			<IonContent color="dark">
 				<IonHeader collapse="condense">
 					<IonToolbar>
-						<IonTitle size="large">{id}</IonTitle>
+						<IonTitle size="large">
+							{countryData.length !== 0
+								? countryData[0].Country
+								: id}
+						</IonTitle>
 					</IonToolbar>
 				</IonHeader>
 				{isLoading && <Loading />}
 				{countryData && (
-					<div className="flex h-full w-full items-center px-4 pt-10 py-24">
-						<ResponsiveContainer width="100%" height="100%">
+					<div className="flex h-full w-full items-center  pt-10 py-24 justify-center">
+						<ResponsiveContainer width="90%" height="100%">
 							<AreaChart
 								width={1}
 								height={1}
@@ -97,7 +119,12 @@ const Country = () => {
 							>
 								<CartesianGrid strokeDasharray="3 3" />
 								<XAxis dataKey="Date" />
-								<YAxis />
+								<YAxis
+									type="number"
+									tickSize={0}
+									tickCount={10}
+									width={90}
+								/>
 								<Tooltip />
 								<Area
 									type="monotone"
