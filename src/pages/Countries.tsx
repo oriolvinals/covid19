@@ -11,6 +11,8 @@ import { countries } from "../services/api";
 import { useEffect, useState } from "react";
 import Error from "../components/Error";
 import { dots } from "../services/dots";
+import React from "react";
+
 import { albumsOutline, todayOutline } from "ionicons/icons";
 
 interface Country {
@@ -54,6 +56,7 @@ const Countries = () => {
 			Country.toLowerCase().includes(searchText.toLowerCase())
 		);
 		setCountriesFilter(filteredCountries);
+		console.log(countriesData);
 	}, [countriesData, searchText]);
 
 	return (
@@ -81,98 +84,121 @@ const Countries = () => {
 							return (
 								<a
 									key={c.ID}
-									className="rounded-md bg-gray-800 p-4"
+									className="rounded-xl"
 									href={"/country/" + c.Slug}
+									style={{
+										backgroundImage:
+											`url(https://purecatamphetamine.github.io/country-flag-icons/3x2/` +
+											c.CountryCode +
+											`.svg)`,
+										backgroundPosition: "center",
+										backgroundRepeat: "no-repeat",
+										backgroundSize: "200%",
+									}}
 								>
-									<p className="text-center uppercase text-2xl font-black mb-3">
-										{c.Country}
-									</p>
-									<div className="flex flex-col space-y-3 justify-center items-center">
-										<div>
-											<p className="text-base text-center">
-												Confirmed
-											</p>
-											<div className="flex flex-row space-x-2 items-center">
-												<div className="capitalize text-gray-400 text-sm bg-gray-700 rounded-md p-1 px-3 flex flex-row justify-center items-center space-x-4">
-													<IonIcon
-														icon={todayOutline}
-														className="h-7 w-7"
-														color="danger"
-													/>
-													<p className="text-base">
-														{dots(c.NewConfirmed)}
-													</p>
+									<div className="p-5 w-full h-full bg-black bg-opacity-75 rounded-xl">
+										<p className="text-center uppercase text-2xl font-black mb-3">
+											{c.Country}
+										</p>
+										<div className="flex flex-col space-y-3 justify-center items-center">
+											<div>
+												<p className="text-base text-center">
+													Confirmed
+												</p>
+												<div className="flex flex-row space-x-2 items-center">
+													<div className="capitalize text-gray-400 text-sm bg-gray-700 rounded-md p-1 px-3 flex flex-row justify-center items-center space-x-4">
+														<IonIcon
+															icon={todayOutline}
+															className="h-7 w-7"
+															color="danger"
+														/>
+														<p className="text-base">
+															{dots(
+																c.NewConfirmed
+															)}
+														</p>
+													</div>
+													<div className="capitalize text-gray-400 text-sm bg-gray-700 rounded-md p-1 px-3  flex flex-row justify-center items-center space-x-4">
+														<IonIcon
+															icon={albumsOutline}
+															className="h-7 w-7"
+															color="danger"
+														/>
+														<p className="text-base">
+															{dots(
+																c.TotalConfirmed
+															)}
+														</p>
+													</div>
 												</div>
-												<div className="capitalize text-gray-400 text-sm bg-gray-700 rounded-md p-1 px-3  flex flex-row justify-center items-center space-x-4">
-													<IonIcon
-														icon={albumsOutline}
-														className="h-7 w-7"
-														color="danger"
-													/>
-													<p className="text-base">
-														{dots(c.TotalConfirmed)}
-													</p>
+											</div>
+											<div>
+												<p className="text-base text-center">
+													Deaths
+												</p>
+												<div className="flex flex-row space-x-2 items-center">
+													<div className="capitalize text-gray-400 text-sm bg-gray-700 rounded-md p-1 px-3 flex flex-row justify-center items-center space-x-4">
+														<IonIcon
+															icon={todayOutline}
+															className="h-7 w-7"
+															color="danger"
+														/>
+														<p className="text-base">
+															{dots(c.NewDeaths)}
+														</p>
+													</div>
+													<div className="capitalize text-gray-400 text-sm bg-gray-700 rounded-md p-1 px-3  flex flex-row justify-center items-center space-x-4">
+														<IonIcon
+															icon={albumsOutline}
+															className="h-7 w-7"
+															color="danger"
+														/>
+														<p className="text-base">
+															{dots(
+																c.TotalDeaths
+															)}
+														</p>
+													</div>
+												</div>
+											</div>
+											<div>
+												<p className="text-base text-center">
+													Recovered
+												</p>
+												<div className="flex flex-row space-x-2 items-center">
+													<div className="capitalize text-gray-400 text-sm bg-gray-700 rounded-md p-1 px-3 flex flex-row justify-center items-center space-x-4">
+														<IonIcon
+															icon={todayOutline}
+															className="h-7 w-7"
+															color="success"
+														/>
+														<p className="text-base">
+															{dots(
+																c.NewRecovered
+															)}
+														</p>
+													</div>
+													<div className="capitalize text-gray-400 text-sm bg-gray-700 rounded-md p-1 px-3  flex flex-row justify-center items-center space-x-4">
+														<IonIcon
+															icon={albumsOutline}
+															className="h-7 w-7"
+															color="success"
+														/>
+														<p className="text-base">
+															{dots(
+																c.TotalRecovered
+															)}
+														</p>
+													</div>
 												</div>
 											</div>
 										</div>
-										<div>
-											<p className="text-base text-center">
-												Deaths
-											</p>
-											<div className="flex flex-row space-x-2 items-center">
-												<div className="capitalize text-gray-400 text-sm bg-gray-700 rounded-md p-1 px-3 flex flex-row justify-center items-center space-x-4">
-													<IonIcon
-														icon={todayOutline}
-														className="h-7 w-7"
-														color="danger"
-													/>
-													<p className="text-base">
-														{dots(c.NewDeaths)}
-													</p>
-												</div>
-												<div className="capitalize text-gray-400 text-sm bg-gray-700 rounded-md p-1 px-3  flex flex-row justify-center items-center space-x-4">
-													<IonIcon
-														icon={albumsOutline}
-														className="h-7 w-7"
-														color="danger"
-													/>
-													<p className="text-base">
-														{dots(c.TotalDeaths)}
-													</p>
-												</div>
-											</div>
-										</div>
-										<div>
-											<p className="text-base text-center">
-												Recovered
-											</p>
-											<div className="flex flex-row space-x-2 items-center">
-												<div className="capitalize text-gray-400 text-sm bg-gray-700 rounded-md p-1 px-3 flex flex-row justify-center items-center space-x-4">
-													<IonIcon
-														icon={todayOutline}
-														className="h-7 w-7"
-														color="success"
-													/>
-													<p className="text-base">
-														{dots(c.NewRecovered)}
-													</p>
-												</div>
-												<div className="capitalize text-gray-400 text-sm bg-gray-700 rounded-md p-1 px-3  flex flex-row justify-center items-center space-x-4">
-													<IonIcon
-														icon={albumsOutline}
-														className="h-7 w-7"
-														color="success"
-													/>
-													<p className="text-base">
-														{dots(c.TotalRecovered)}
-													</p>
-												</div>
-											</div>
-										</div>
+										<p className="text-right text-sm mt-2">
+											{new Date(
+												c.Date
+											).toLocaleDateString()}
+										</p>
 									</div>
-									<p className="text-right text-sm mt-2">
-										{new Date(c.Date).toLocaleDateString()}
-									</p>
 								</a>
 							);
 						})}
