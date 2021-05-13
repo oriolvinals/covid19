@@ -56,7 +56,6 @@ const Countries = () => {
 			Country.toLowerCase().includes(searchText.toLowerCase())
 		);
 		setCountriesFilter(filteredCountries);
-		console.log(countriesData);
 	}, [countriesData, searchText]);
 
 	return (
